@@ -1,4 +1,4 @@
-package ru.playjim;
+package ru.playjim.processor;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

@@ -1,19 +1,28 @@
 package ru.playjim.services;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.Message;
+import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
-import ru.playjim.model.Sensor;
+import ru.playjim.entities.SensorDto;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class Producer {
-    private final KafkaTemplate<String, Sensor> kafkaTemplateSensor;
-    public void sendSensor(String topic,Sensor sensor) {
+    private static final String TOPIC = "topic1";
+    private final KafkaTemplate<String, SensorDto> kafkaTemplateSensor;
+
+    public void sendSensor(SensorDto sensor) {
         log.info("Start send");
-        kafkaTemplateSensor.send(topic,sensor);
+        Message<SensorDto> message = MessageBuilder
+                .withPayload(sensor)
+                .setHeader(KafkaHeaders.TOPIC, TOPIC)
+                .build();
+        kafkaTemplateSensor.send(message);
         log.info("complete send");
     }
 }

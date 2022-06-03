@@ -11,7 +11,7 @@ import org.springframework.kafka.core.KafkaAdmin;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
 import org.springframework.kafka.support.serializer.JsonSerializer;
-import ru.playjim.model.Sensor;
+import ru.playjim.entities.SensorDto;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,23 +20,17 @@ import java.util.Map;
 public class KafkaConfig {
     private final static String SERVER = "localhost:9091";
 
-    private ProducerFactory<String, Sensor> producerFactoryString() {
+    private ProducerFactory<String, SensorDto> producerFactorySensor() {
         Map<String, Object> configProps = new HashMap<>();
-        configProps.put(
-                ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,
-                SERVER);
-        configProps.put(
-                ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG,
-                StringSerializer.class);
-        configProps.put(
-                ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,
-                JsonSerializer.class);
+        configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, SERVER);
+        configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        configProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
         return new DefaultKafkaProducerFactory<>(configProps);
     }
 
     @Bean
-    public KafkaTemplate<String, Sensor> kafkaTemplateString() {
-        return new KafkaTemplate<>(producerFactoryString());
+    public KafkaTemplate<String, SensorDto> kafkaTemplateSensor() {
+        return new KafkaTemplate<>(producerFactorySensor());
     }
 
     @Bean
@@ -50,9 +44,4 @@ public class KafkaConfig {
     public NewTopic topic1() {
         return new NewTopic("topic1", 1, (short) 1);
     }
-
-//    @Bean
-//    public NewTopic topic2() {
-//        return new NewTopic("topic2", 1, (short) 1);
-//    }
 }
